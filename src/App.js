@@ -95,7 +95,13 @@ function App() {
       <div className="w-full bg-green-700 h-[500px] relative">
         {true && (
           // playinline 전체화면으로 재생되지 않고 화면안에서 재생
-          <video id="videoElement" ref={videoRef} autoPlay playsInline></video>
+          <video
+            className="w-[300px] h-[300px]"
+            id="videoElement"
+            ref={videoRef}
+            autoPlay
+            playsInline
+          ></video>
         )}
         {true && <canvas id="canvasElement" ref={canvasRef}></canvas>}
       </div>

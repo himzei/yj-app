@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
+import jsQR from "jsqr";
 
 function App() {
   const [permissionGranted, setPermissionGranted] = useState(null);
   const [videoStream, setVideoStream] = useState(null);
+  const [qrData, setQrData] = useState(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -40,6 +42,47 @@ function App() {
         });
       }
     };
+  }, [permissionGranted, videoStream]);
+
+  useEffect(() => {
+    if (qrData) {
+      // qrData가 변경될 때마다 서버에 데이터 전송
+      alert("aaaaaa");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [qrData]);
+
+  useEffect(() => {
+    if (true && videoStream) {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      const canvasContext = canvas.getContext("2d");
+
+      const scan = () => {
+        if (video.readyState === video.HAVE_ENOUGH_DATA) {
+          const videoWidth = video.videoWidth;
+          const videoHeight = video.videoHeight;
+
+          canvas.width = videoWidth;
+          canvas.height = videoHeight;
+          canvasContext.clearRect(0, 0, canvas.width, canvas.height); // 이전 프레임 지우기
+          canvasContext.drawImage(video, 0, 0, videoWidth, videoHeight);
+          const imageData = canvasContext.getImageData(
+            0,
+            0,
+            videoWidth,
+            videoHeight
+          );
+          const code = jsQR(imageData.data, imageData.width, imageData.height);
+          if (code) {
+            setQrData(code.data);
+          }
+        }
+        requestAnimationFrame(scan);
+      };
+
+      requestAnimationFrame(scan);
+    }
   }, [permissionGranted, videoStream]);
 
   return (

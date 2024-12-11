@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import jsQR from "jsqr";
 
 function App() {
+  const [userLocation, setUserLocation] = useState({});
   const [permissionGranted, setPermissionGranted] = useState(null);
   const [videoStream, setVideoStream] = useState(null);
   const [qrData, setQrData] = useState(null);
@@ -9,12 +10,30 @@ function App() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setUserLocation({ latitude, longitude });
+        },
+        (error) => {
+          console.log(error);
+          return { error };
+        }
+      );
+    } else {
+      console.error("브라우저가 Geolocation API를 지원하지 않습니다.");
+      return { error: "브라우저가 Geolocation API를 지원하지 않습니다." };
+    }
+  }, []);
+  console.log(userLocation);
+
+  useEffect(() => {
     const requestCameraPermission = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: "environment", // 셀카 모드로 설정
-          },
+          video: true,
+          audio: true,
         });
         // 카메라 액세스 허용됨
         setPermissionGranted(true);
@@ -47,7 +66,7 @@ function App() {
   useEffect(() => {
     if (qrData) {
       // qrData가 변경될 때마다 서버에 데이터 전송
-      alert("aaaaaa");
+      alert(qrData);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qrData]);
@@ -92,14 +111,14 @@ function App() {
       </h1>
 
       {/* QR Code Scanner */}
-      <div className="w-full bg-green-700 h-[500px] relative">
+      <div className="w-full h-[500px] relative">
         {true && (
           // playinline 전체화면으로 재생되지 않고 화면안에서 재생
           <video
-            className="absolute inset-0 w-full h-full"
+            className="border absolute inset-0 w-full h-full"
             id="videoElement"
             ref={videoRef}
-            autoPlay
+            autoPlay={true}
             playsInline
           ></video>
         )}

@@ -96,14 +96,20 @@ function App() {
         {true && (
           // playinline 전체화면으로 재생되지 않고 화면안에서 재생
           <video
-            className="w-[300px] h-[300px]"
+            className="absolute inset-0 w-full h-full"
             id="videoElement"
             ref={videoRef}
             autoPlay
             playsInline
           ></video>
         )}
-        {true && <canvas id="canvasElement" ref={canvasRef}></canvas>}
+        {true && (
+          <canvas
+            className="absolute inset-0 w-full h-full"
+            id="canvasElement"
+            ref={canvasRef}
+          ></canvas>
+        )}
       </div>
     </div>
   );

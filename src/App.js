@@ -67,7 +67,7 @@ function App() {
   useEffect(() => {
     if (qrData) {
       // qrData가 변경될 때마다 서버에 데이터 전송
-      alert(qrData);
+      alert(`${qrData}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qrData]);

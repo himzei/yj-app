@@ -78,10 +78,10 @@ function App() {
       const canvas = canvasRef.current;
       const canvasContext = canvas.getContext("2d");
 
-      const videoWidth = video.videoWidth;
-      const videoHeight = video.videoHeight;
-
       const scan = () => {
+        const videoWidth = video.videoWidth;
+        const videoHeight = video.videoHeight;
+
         if (video.readyState === video.HAVE_ENOUGH_DATA) {
           canvas.width = videoWidth;
           canvas.height = videoHeight;

@@ -92,40 +92,12 @@ function App() {
       </h1>
 
       {/* QR Code Scanner */}
-      <div
-        className="qrZone"
-        style={{
-          position: "relative",
-          width: "300px",
-          height: "300px",
-          overflow: "hidden",
-        }}
-      >
+      <div className="w-full bg-green-700 h-[500px] relative">
         {true && (
-          <video
-            id="videoElement"
-            ref={videoRef}
-            autoPlay
-            playsInline
-            style={{
-              position: "absolute",
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-            }}
-          ></video>
+          // playinline 전체화면으로 재생되지 않고 화면안에서 재생
+          <video id="videoElement" ref={videoRef} autoPlay playsInline></video>
         )}
-        {true && (
-          <canvas
-            id="canvasElement"
-            ref={canvasRef}
-            style={{
-              position: "absolute",
-              width: "100%",
-              height: "100%",
-            }}
-          ></canvas>
-        )}
+        {true && <canvas id="canvasElement" ref={canvasRef}></canvas>}
       </div>
     </div>
   );

@@ -32,8 +32,9 @@ function App() {
     const requestCameraPermission = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-          audio: true,
+          video: {
+            facingMode: "environment",
+          },
         });
         // 카메라 액세스 허용됨
         setPermissionGranted(true);
@@ -77,11 +78,11 @@ function App() {
       const canvas = canvasRef.current;
       const canvasContext = canvas.getContext("2d");
 
+      const videoWidth = video.videoWidth;
+      const videoHeight = video.videoHeight;
+
       const scan = () => {
         if (video.readyState === video.HAVE_ENOUGH_DATA) {
-          const videoWidth = video.videoWidth;
-          const videoHeight = video.videoHeight;
-
           canvas.width = videoWidth;
           canvas.height = videoHeight;
           canvasContext.clearRect(0, 0, canvas.width, canvas.height); // 이전 프레임 지우기
@@ -99,6 +100,44 @@ function App() {
         }
         requestAnimationFrame(scan);
       };
+
+      // const scanQRCode = async () => {
+      //   const dectector = new QRCodeDetector({
+      //     formats: ["code_39", "codabar", "ean_13"],
+      //   });
+
+      //   async function detect() {
+      //     if (!video || !canvas) return;
+
+      //     canvasContext.drawImage(video, 0, 0, videoWidth, videoHeight);
+
+      //     try {
+      //       const barcodes = await dectector.detect(canvas);
+      //       barcodes.forEach((barcode) => {
+      //         // Draw a border around the QR code
+      //         const { boundingBox } = barcode;
+      //         canvasContext.strokeStyle = "red";
+      //         canvasContext.lineWidth = 4;
+      //         canvasContext.strokeRect(
+      //           boundingBox.x,
+      //           boundingBox.y,
+      //           boundingBox.width,
+      //           boundingBox.height
+      //         );
+
+      //         console.log("Detected QR code:", barcode.rawValue);
+      //       });
+      //     } catch (err) {
+      //       console.error("Error detecting QR code:", err);
+      //     }
+
+      //     requestAnimationFrame(detect);
+      //   }
+
+      //   detect();
+      // };
+
+      // scanQRCode();
 
       requestAnimationFrame(scan);
     }
